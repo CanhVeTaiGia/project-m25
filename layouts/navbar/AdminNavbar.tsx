@@ -8,10 +8,10 @@ import React, { useState } from "react";
 const AdminNavbar = () => {
   // route
   const route = useRouter();
+  const [user, setUser] = useState<UserType>();
 
   // Hàm đăng xuất
   const handleLogout = () => {
-    const [user, setUser] = useState<UserType>();
     localStorage.removeItem("userId");
     route.push("/sign-in");
   };

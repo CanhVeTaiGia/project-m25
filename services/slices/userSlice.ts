@@ -1,4 +1,4 @@
-import { getAllUser } from "@/config/user.service";
+import { getAllUser, getUserById } from "@/config/user.service";
 import { UserType } from "@/interface/userType";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -15,7 +15,9 @@ const userSlice: any = createSlice({
         .addCase(getAllUser.fulfilled, (state, action) => {
             state.users = action.payload;
         })
-        
+        .addCase(getUserById.fulfilled, (state, action) => {
+            state.user = action.payload;
+        })
     }
 });
 export default userSlice.reducer;
