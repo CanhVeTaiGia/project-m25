@@ -8,7 +8,7 @@ import React, { useState } from "react";
 const AdminNavbar = () => {
   // route
   const route = useRouter();
-  const [user, setUser] = useState<UserType>();
+  // const [user, setUser] = useState<UserType>();
 
   // Hàm đăng xuất
   const handleLogout = () => {
