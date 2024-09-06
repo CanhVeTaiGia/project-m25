@@ -1,5 +1,5 @@
 "use client";
-import { getAllUser } from "@/config/user.service";
+import { getAllUser } from "@/services/user.service";
 import { UserType } from "@/interface/userType";
 import { AdminHeaderUser } from "@/layouts/header/AdminHeader";
 import { RootType } from "@/redux/store";
@@ -37,7 +37,7 @@ const UserManager = () => {
               {users.map((user: UserType, index: number) => {
                 return (
                   <tr key={index}>
-                    <td>{user.username}</td>
+                    <td className="flex">{user.username}</td>
                   </tr>
                 );
               })}

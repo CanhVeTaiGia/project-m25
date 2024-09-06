@@ -1,4 +1,4 @@
-import { getAllUser, getUserById } from "@/config/user.service";
+import { getAllUser, getUserById } from "@/services/user.service";
 import { UserType } from "@/interface/userType";
 import { createSlice } from "@reduxjs/toolkit";
 

@@ -1,5 +1,5 @@
 "use client";
-import { getUserById } from "@/config/user.service";
+import { getUserById } from "@/services/user.service";
 import { UserType } from "@/interface/userType";
 import { AdminHeaderUser } from "@/layouts/header/AdminHeader";
 
