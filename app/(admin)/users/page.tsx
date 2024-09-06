@@ -29,8 +29,8 @@ const UserManager = () => {
           <table className="w-[100%]">
             <thead>
               <tr>
-                <th>Người dùng</th>
-                <th>Trạng thái</th>
+                <th className="text-start">Người dùng</th>
+                <th className="text-start">Trạng thái</th>
               </tr>
             </thead>
             <tbody>
