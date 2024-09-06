@@ -46,7 +46,7 @@ const AdminSignIn = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res: AxiosResponse = await axios.get(
-      `http://localhost:5000/users?email_like=${user.email}`
+      `http://localhost:8080/users?email_like=${user.email}`
     );
     // console.log(user.email);
     if (warning.email || warning.password) {
@@ -95,10 +95,10 @@ const AdminSignIn = () => {
 
   // Chuyển hướng sang trang admin hoặc không
   const handleRouteHome = () => {
-    route.push('/')
+    route.push("/");
   };
   const handleRouteAdmin = () => {
-    route.push('/dashboard')
+    route.push("/dashboard");
   };
 
   // Hàm đưa input vào state
@@ -119,10 +119,22 @@ const AdminSignIn = () => {
       {routeForm && (
         <div className="z-[100] bg-[#000000bb] w-[100%] flex justify-center items-center h-[100vh] top-0 left-0 absolute">
           <div className="w-[500px] px-[20px] rounded-[5px] py-[40px] p-[10px] border-[1px] bg-[#111111cd]">
-            <h2 className="text-center text-[32px] pb-[20px]">Chuyển đến trang</h2>
+            <h2 className="text-center text-[32px] pb-[20px]">
+              Chuyển đến trang
+            </h2>
             <div className="flex justify-between w-[100%] z-[100] py-[20px] px-[80px]">
-              <button onClick={handleRouteHome} className="h-[40px] bg-[#0af] rounded-[5px] border-[1px] p-[10px]">Trang Chủ</button>
-              <button onClick={handleRouteAdmin} className="h-[40px] bg-[red] rounded-[5px] border-[1px] p-[10px]">Trang Quản lí</button>
+              <button
+                onClick={handleRouteHome}
+                className="h-[40px] bg-[#0af] rounded-[5px] border-[1px] p-[10px]"
+              >
+                Trang Chủ
+              </button>
+              <button
+                onClick={handleRouteAdmin}
+                className="h-[40px] bg-[red] rounded-[5px] border-[1px] p-[10px]"
+              >
+                Trang Quản lí
+              </button>
             </div>
           </div>
         </div>
