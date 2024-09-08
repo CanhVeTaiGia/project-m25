@@ -8,10 +8,16 @@ import { UserSign } from "@/interface/inputValue";
 import { UserType } from "@/interface/userType";
 import bcrypt from "bcryptjs-react";
 import { useRouter } from "next/navigation";
+import { url } from "@/baseUrl/url";
+
+export const validateEmail = (email: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
 
 const AdminSignIn = () => {
   // Các state
   const route = useRouter();
+  const [invaliteEmail, setInvalitEmail] = useState<boolean>(false);
   const [routeForm, setRouteForm] = useState<boolean>(false);
   const [wrong, setWrong] = useState<{
     email: boolean;
@@ -46,12 +52,20 @@ const AdminSignIn = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res: AxiosResponse = await axios.get(
-      `http://localhost:8080/users?email_like=${user.email}`
+      `${url}/users?email_like=${user.email}`
     );
     // console.log(user.email);
     if (warning.email || warning.password) {
       return;
     }
+    if (!validateEmail(user.email)) {
+      setInvalitEmail(true);
+      setTimeout(() => {
+        setInvalitEmail(false);
+      }, 1000);
+      return;
+    }
+
     if (res.data.length > 0) {
       let decryptedPass: boolean = bcrypt.compareSync(
         user.password,
@@ -118,7 +132,7 @@ const AdminSignIn = () => {
     <div className="w-[100%] relative h-[100vh] flex justify-center pt-[150px]">
       {routeForm && (
         <div className="z-[100] bg-[#000000bb] w-[100%] flex justify-center items-center h-[100vh] top-0 left-0 absolute">
-          <div className="w-[500px] px-[20px] rounded-[5px] py-[40px] p-[10px] border-[1px] bg-[#111111cd]">
+          <div className="w-[500px] text-white px-[20px] rounded-[5px] py-[40px] p-[10px] border-[1px] bg-[#111111cd]">
             <h2 className="text-center text-[32px] pb-[20px]">
               Chuyển đến trang
             </h2>
@@ -164,6 +178,9 @@ const AdminSignIn = () => {
           />
           {warning.email && (
             <p className="text-[#f00] mt-[5px]">Email không được để trống</p>
+          )}
+          {invaliteEmail && (
+            <p className="text-[#f00] mt-[5px]">Email không đúng định dạng</p>
           )}
           {wrong.email && (
             <p className="text-[#f00] mt-[5px]">Email không đúng</p>

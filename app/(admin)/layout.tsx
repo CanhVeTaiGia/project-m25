@@ -1,14 +1,7 @@
 "use client";
-import { getUserById } from "@/services/user.service";
-import { UserType } from "@/interface/userType";
-import { AdminHeaderUser } from "@/layouts/header/AdminHeader";
-
 import AdminNavbar from "@/layouts/navbar/AdminNavbar";
-import { RootType } from "@/redux/store";
-import axios, { AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 const Admin = ({
   children,
@@ -22,22 +15,14 @@ const Admin = ({
       ? parseInt(localStorage.getItem("userId")!)
       : undefined;
   });
-  const data = useSelector((state: RootType) => {
-    return state.users;
-  });
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUserById());
-  }, []);
-
-  useEffect(() => {
-    if (!data) {
+    if (!currentId) {
       route.push("/sign-in");
     }
-  }, [currentId, dispatch]);
+  }, []);
   return (
-    <main className="w-[100%] flex h-[100vh]">
+    <main className="w-[100%] overflow-hidden flex h-[100vh]">
       <AdminNavbar></AdminNavbar>
       <div className="flex flex-col w-[87%]">{children}</div>
     </main>

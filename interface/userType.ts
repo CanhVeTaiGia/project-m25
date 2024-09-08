@@ -1,14 +1,13 @@
 export interface UserType{
-    id: number,
+    id?: number,
     username: string,
     email: string,
     fullname: string,
     status: boolean,
     password: string,
     role: boolean,
-    avatar?: string,
+    avatar?: string | undefined,
     phone: string,
     address: string,
-    created_at: string,
-    updated_at?: string
+
 }
