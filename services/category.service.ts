@@ -38,8 +38,9 @@ export const addCategory: any = createAsyncThunk(
 export const deleteCategory: any = createAsyncThunk(
   "category/deleteCategory",
   async (id: number) => {
-    const res: AxiosResponse = await axios.delete(
-      `http://localhost:8080/category/${id}`
+    await axios.delete(`http://localhost:8080/category/${id}`);
+    const res: AxiosResponse = await axios.get(
+      `http://localhost:8080/category`
     );
     return res.data;
   }

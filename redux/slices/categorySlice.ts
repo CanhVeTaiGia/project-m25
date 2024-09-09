@@ -26,10 +26,7 @@ const categorySlice: any = createSlice({
         state.category = action.payload;
       })
       .addCase(deleteCategory.fulfilled, (state, action) => {
-        state.category = state.category.filter(
-          (item: CategoryType) => item.id !== action.payload.id
-        );
-        state.category = [...state.category];
+        state.category = action.payload;
       })
       .addCase(changeCategoryStatus.fulfilled, (state, action) => {
         const existingUser = state.category.find(

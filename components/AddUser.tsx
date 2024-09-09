@@ -17,7 +17,6 @@ const AddUser: React.FC<AddEditUserProps> = ({ handleHideAddUser }) => {
   });
 
   const dispatch = useDispatch();
-
   const handleSignUp = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { email, password, repassword } = user;
@@ -30,7 +29,6 @@ const AddUser: React.FC<AddEditUserProps> = ({ handleHideAddUser }) => {
     ) {
       return;
     }
-    console.log(user);
     const cryptedPassword = bcrypt.hashSync(password, 10)
     const newUser: UserType = {
       email: email,
