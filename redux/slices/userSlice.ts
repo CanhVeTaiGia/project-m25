@@ -6,14 +6,16 @@ import {
 } from "@/services/user.service";
 import { UserType } from "@/interface/userType";
 import { createSlice } from "@reduxjs/toolkit";
-
+import { editCategory } from "@/services/category.service";
 
 const initialState: UserType[] = [];
 const userSlice: any = createSlice({
   name: "users",
   initialState: {
     users: initialState,
-    user: {},
+    user: {
+      
+    },
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -34,8 +36,7 @@ const userSlice: any = createSlice({
       })
       .addCase(addUser.fulfilled, (state, action) => {
         state.users.push(action.payload);
-      })
-      
+      });
   },
 });
 export default userSlice.reducer;

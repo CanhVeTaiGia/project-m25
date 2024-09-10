@@ -30,7 +30,7 @@ const AdminNavbar = () => {
           "https://firebasestorage.googleapis.com/v0/b/m25-project.appspot.com/o/logo%2FPC.png?alt=media&token=1e0a6997-a3d7-44f9-9781-0e3add488d45"
         }
       ></Image>
-      <h2 className="text-[32px] mt-[5px] text-center">PC-AZ</h2>
+      <h2 className="text-[20px] mt-[5px] text-center">Minh Vỹ - Laptop</h2>
 
       <ul className="flex pl-[20px] text-[20px] h-[85%] flex-col justify-evenly">
         <li onClick={() => route.push("/dashboard")} className="cursor-pointer">

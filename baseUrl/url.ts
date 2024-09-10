@@ -1,1 +1,1 @@
-export const url = process.env.NEXT_PUBLIC_LOCALHOST;
+export const url = process.env.NEXT_PUBLIC_LOCALHOST

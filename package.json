@@ -19,6 +19,7 @@
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "bcryptjs-react": "^2.4.6",
+    "firebase": "^10.13.1",
     "next": "14.2.8",
     "react": "^18",
     "react-dom": "^18",

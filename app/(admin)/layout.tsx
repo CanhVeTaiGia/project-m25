@@ -3,11 +3,16 @@ import AdminNavbar from "@/layouts/navbar/AdminNavbar";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
+
 const Admin = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
+  const [role, setRole] = useState<boolean>(() => {
+    const role = localStorage.getItem("role");
+    return role ? JSON.parse(role) : false;
+  });
   const route = useRouter();
   const [currentId, setCurrentId] = useState<number | undefined>(() => {
     localStorage.getItem("userId");
@@ -15,9 +20,10 @@ const Admin = ({
       ? parseInt(localStorage.getItem("userId")!)
       : undefined;
   });
-
+  
+  
   useEffect(() => {
-    if (!currentId) {
+    if (!currentId && role) {
       route.push("/sign-in");
     }
   }, []);

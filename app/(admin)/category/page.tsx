@@ -1,5 +1,5 @@
 "use client";
-import AddAndEditCategory from "@/components/AddCategory";
+import AddAndEditCategory from "@/components/AddAnEditCategory";
 import DeleteCategory from "@/components/DeleteCategory";
 import { CategoryType } from "@/interface/categoryType";
 import { AdminHeaderCategory } from "@/layouts/header/AdminHeader";
@@ -95,7 +95,7 @@ const CategoryManager: React.FC = () => {
           id={showDeleteCategory.currentId}
         />
       )}
-      <AdminHeaderCategory handleShowAddCategory={handleShowAddCategory} showAddAndEditCategory={showAddAndEditCategory}/>
+      <AdminHeaderCategory handleShowAddCategory={handleShowAddCategory}/>
       <>
         <div className="w-[100%] h-[100%] p-[20px] bg-[#ddd] ">
           <div className=" w-[100%] rounded-[5px] bg-[#fff] p-[20px]">

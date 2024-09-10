@@ -1,7 +1,10 @@
 import { CategoryType } from "@/interface/categoryType";
 import {
+  addCategory,
   changeCategoryStatus,
   deleteCategory,
+  editCategory,
+  getACategory,
   getCategory,
 } from "@/services/category.service";
 import { createSlice } from "@reduxjs/toolkit";
@@ -28,10 +31,20 @@ const categorySlice: any = createSlice({
       .addCase(deleteCategory.fulfilled, (state, action) => {
         state.category = action.payload;
       })
-      .addCase(changeCategoryStatus.fulfilled, (state, action) => {
-        const existingUser = state.category.find(
-          (item: CategoryType) => item.id === action.payload.id
-        );
+      .addCase(addCategory.fulfilled, (state, action) => {
+        state.category = [...state.category, action.payload];
+      })
+      .addCase(getACategory.fulfilled, (state, action) => {
+        state.editCategory = action.payload;
+      })
+      .addCase(editCategory.fulfilled, (state, action) => {
+        const existingCategory = state.category.find((item: CategoryType) => {
+          return item.id === action.payload.id;
+        });
+        if (existingCategory) {
+          existingCategory.name = action.payload.name;
+          existingCategory.description = action.payload.description;
+        }
       });
   },
 });

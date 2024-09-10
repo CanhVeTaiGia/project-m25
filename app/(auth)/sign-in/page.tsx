@@ -51,6 +51,8 @@ const AdminSignIn = () => {
   // Hàm đăng nhập
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(user.email);
+
     const res: AxiosResponse = await axios.get(
       `${url}/users?email_like=${user.email}`
     );
@@ -91,9 +93,11 @@ const AdminSignIn = () => {
       }
       if (res.data[0].email === user.email && decryptedPass) {
         if (res.data[0].role) {
+          localStorage.setItem("role", res.data[0].role);
           localStorage.setItem("userId", res.data[0].id);
           setRouteForm(true);
         } else {
+          localStorage.setItem("role", res.data[0].role);
           localStorage.setItem("userId", res.data[0].id);
           route.push("/");
         }
@@ -204,15 +208,18 @@ const AdminSignIn = () => {
             <FontAwesomeIcon
               onClick={() => setShowpassword(false)}
               className="text-[24px] absolute top-[40px] right-[19px] cursor-pointer"
-              icon={faEyeSlash}
+              icon={faEye}
             />
           ) : (
             <FontAwesomeIcon
               onClick={() => setShowpassword(true)}
               className="text-[24px] absolute top-[40px] right-[20px] cursor-pointer"
-              icon={faEye}
+              icon={faEyeSlash}
             />
           )}
+        </div>
+        <div className="flex justify-end px-[10px] cursor-pointer">
+          <p onClick={() => route.push('sign-up')} className="underline text-[#08f]">Đăng ký</p>
         </div>
         <div className="w-[100%] mt-[20px] flex justify-center">
           <button className="px-[30px] h-[40px] text-white rounded-[5px] hover:bg-[#2793ff] bg-[#1482ff]">

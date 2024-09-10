@@ -45,3 +45,24 @@ export const deleteCategory: any = createAsyncThunk(
     return res.data;
   }
 );
+
+export const getACategory: any = createAsyncThunk(
+  "category/getACategory",
+  async (id: number) => {
+    const res: AxiosResponse = await axios.get(
+      `http://localhost:8080/category/${id}`
+    );
+    return res.data;
+  }
+);
+
+export const editCategory: any = createAsyncThunk(
+  "category/editCategory",
+  async (category: CategoryType) => {
+    const res: AxiosResponse = await axios.patch(
+      `http://localhost:8080/category/${category.id}`,
+      { ...category }
+    );
+    return res.data;
+  }
+);

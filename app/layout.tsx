@@ -6,7 +6,7 @@ import { ClientRootLayout } from "./ClientRootLayout";
 
 
 export const metadata: Metadata = {
-  title: "PC-AZ",
+  title: "Minh Vỹ - Laptop",
 };
 
 const inter = Inter({ subsets: ["latin"] });

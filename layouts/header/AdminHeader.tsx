@@ -25,23 +25,15 @@ export const AdminHeaderUser: React.FC<AdminHeaderUserProps> = ({
   );
 };
 
-import React from "react";
-
 interface AddAndEditCategoryProps {
   handleShowAddCategory: () => void;
-  showAddAndEditCategory: {
-    type: "add" | "edit" | "";
-    isShowing: boolean;
-    currentId: number | null | undefined;
-  };
 }
 export const AdminHeaderCategory: React.FC<AddAndEditCategoryProps> = ({
   handleShowAddCategory,
-  showAddAndEditCategory,
 }) => {
   return (
     <header className="w-[100%] px-[20px] items-center h-[100px] text-black flex bg-[#ffffff]">
-      <h2 className="text-[24px] pl-[20px]">Thêm Danh mục</h2>
+      <h2 className="text-[24px] pl-[20px]">Danh mục</h2>
       <button
         onClick={handleShowAddCategory}
         className="ml-[900px] rounded-[5px] text-white bg-[#08f] p-[10px]"
@@ -49,5 +41,33 @@ export const AdminHeaderCategory: React.FC<AddAndEditCategoryProps> = ({
         Thêm Danh Mục
       </button>
     </header>
+  );
+};
+
+interface AdminHeaderProductProps {
+  showAddAndEditModal: {
+    show: boolean;
+    id: number | undefined;
+    type: "add" | "edit";
+  };
+  handleShowAddOrEditForm: (type: "add" | "edit") => void;
+}
+export const AdminHeaderProduct: React.FC<AdminHeaderProductProps> = ({
+  showAddAndEditModal,
+  handleShowAddOrEditForm,
+  
+}) => {
+  return (
+    <>
+      <header className="w-[100%] px-[20px] items-center h-[100px] text-black flex bg-[#ffffff]">
+        <h2 className="text-[24px] pl-[20px]">Sản phẩm</h2>
+        <button
+          onClick={() => handleShowAddOrEditForm("add")}
+          className="ml-[900px] rounded-[5px] text-white bg-[#08f] p-[10px]"
+        >
+          Thêm Sản phẩm
+        </button>
+      </header>
+    </>
   );
 };
