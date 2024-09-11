@@ -2,6 +2,7 @@
 import Slider from "@/components/Slider";
 import { ProductType } from "@/interface/productType";
 import { RootType } from "@/redux/store";
+import { getACategory } from "@/services/category.service";
 import { getProducts } from "@/services/product.service";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -14,9 +15,15 @@ const Home: React.FC = () => {
   const { products }: any = useSelector((state: RootType) => {
     return state.products;
   });
+  const { editCategory }: any = useSelector((state: RootType) => {
+    return state.category;
+  });
 
   useEffect(() => {
-    dispatch(getProducts({}));
+    dispatch(getACategory())
+  }, [])
+  useEffect(() => {
+    dispatch(getProducts());
   }, []);
   return (
     <>
@@ -24,7 +31,10 @@ const Home: React.FC = () => {
         <Slider />
         <div className="flex flex-wrap mt-[10px] gap-[18px]">
           {products.map((product: ProductType) => (
-            <div onClick={() => route.push(`/${product.id}`)} className="w-[280px] hover:border-[1px] cursor-pointer hover:border-[#f00] h-[400px] bg-white p-[5px]">
+            <div
+              onClick={() => route.push(`/${product.id}`)}
+              className="w-[280px] hover:border-[1px] cursor-pointer hover:border-[#f00] h-[400px] bg-white p-[5px]"
+            >
               <img className="w-[100%] h-[280px]" src={product.image} />
               <h2 className="text-center text-[16px] font-[700] mt-[10px]">
                 {product.name}

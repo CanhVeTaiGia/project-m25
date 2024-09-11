@@ -1,23 +1,31 @@
 "use client";
+import { CategoryType } from "@/interface/categoryType";
 import { ProductType } from "@/interface/productType";
 import { RootType } from "@/redux/store";
-import { getCategory } from "@/services/category.service";
+import {
+  editCategory,
+  getACategory,
+  getCategory,
+} from "@/services/category.service";
 import { getProducts } from "@/services/product.service";
 import { getUserById } from "@/services/user.service";
 import {
   faCartShopping,
+  faHouse,
   faLaptop,
+  faMagnifyingGlass,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 interface HeaderProps {}
 const Header: React.FC = () => {
   const route = useRouter();
+  const pathname = usePathname();
   const dispatch = useDispatch();
   const { user }: any = useSelector((state: RootType) => {
     return state.users;
@@ -29,8 +37,6 @@ const Header: React.FC = () => {
     return state.products;
   });
 
-  console.log(category);
-
   const [currentId, setCurrentId] = useState<number>(() => {
     const id = localStorage.getItem("userId");
     return id ? JSON.parse(id) : 0;
@@ -40,6 +46,12 @@ const Header: React.FC = () => {
     localStorage.removeItem("userId");
     route.push("/sign-in");
   };
+  const handleSearchProduct = () => {};
+  const handleSetCategory = (id: number | undefined) => {
+    localStorage.setItem("categoryId", JSON.stringify(id));
+    // if()
+    // route.push("/home");
+  };
 
   useEffect(() => {
     dispatch(getProducts());
@@ -47,6 +59,7 @@ const Header: React.FC = () => {
   useEffect(() => {
     dispatch(getCategory());
   }, []);
+
   useEffect(() => {
     dispatch(getUserById(currentId));
   }, [currentId, dispatch]);
@@ -65,19 +78,28 @@ const Header: React.FC = () => {
             ></Image>
             <h2 className="text-[20px] font-[700]">Minh Vỹ - Laptop</h2>
           </div>
-          <div>
+          <div className="flex">
             <input
               type="text"
               placeholder="Bạn muốn tìm sản phẩm gì"
               className="w-[400px] py-[5px] px-[10px] border-[#08f] outline-none border-[1px]"
             />
+            <button className="flex justify-center size-[40px] bg-[#08f] items-center">
+              <FontAwesomeIcon
+                className="text-[#fff]"
+                icon={faMagnifyingGlass}
+              />
+            </button>
           </div>
-          <div className="w-[40px] relative">
+          <div className="w-[40px] cursor-pointer relative">
             <FontAwesomeIcon
               icon={faCartShopping}
               className="text-[32px]"
             ></FontAwesomeIcon>
-            <div onClick={() => route.push('/carts')} className="size-[20px] rounded-[50%] flex justify-center items-center text-white absolute bg-[red] top-[-10px] right-[-10px]">
+            <div
+              onClick={() => route.push("/carts")}
+              className="size-[20px] rounded-[50%] flex justify-center items-center text-white absolute bg-[red] top-[-10px] right-[-10px]"
+            >
               {0 && user.carts.length}
             </div>
           </div>
@@ -114,14 +136,26 @@ const Header: React.FC = () => {
         </div>
       </header>
       <div className="bg-[#08f] relative text-white px-[10px] flex justify-around">
+        <div
+          className="flex py-[10px] gap-[10px] cursor-pointer"
+          onClick={() => route.push("/home")}
+        >
+          <FontAwesomeIcon icon={faHouse} />
+          <p>Trang chủ</p>
+        </div>
         <div className="group flex py-[10px] cursor-pointer">
           <FontAwesomeIcon className="text-[20px]" icon={faLaptop} />{" "}
           <p className="ml-[10px]">Laptop mới</p>
           <ul className="absolute border-[1px] hover:inline top-[43px] z-[999] rounded-[5px] left-[270px] text-black bg-white group-hover:inline hidden w-[200px]">
             {products
+
               .map((item: ProductType) => {
                 return (
-                  <li className="border-[1px] p-[10px]" key={item.id}>
+                  <li
+                    onClick={() => route.push(`/${item.id}`)}
+                    className="border-[1px] p-[10px]"
+                    key={item.id}
+                  >
                     {item.name}
                   </li>
                 );
@@ -136,8 +170,14 @@ const Header: React.FC = () => {
             Laptop các loại{" "}
           </p>
           <ul className="absolute border-[1px] hover:inline top-[42px] z-[99999999] rounded-[5px] left-[-20px] text-black bg-white group-hover:inline hidden w-[200px]">
-            {category.map((item: any) => (
-              <li className="border-[1px] p-[10px]">{item.name}</li>
+            {category.map((item: CategoryType) => (
+              <li
+                onClick={() => handleSetCategory(item.id)}
+                key={item.id}
+                className="border-[1px] p-[10px]"
+              >
+                {item.name}
+              </li>
             ))}
           </ul>
         </div>

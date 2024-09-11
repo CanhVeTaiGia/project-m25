@@ -2,7 +2,7 @@
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-[100%] z-[20] block bg-[#fff] mt-[10px] px-[150px] py-[30px]">
+    <footer className="w-[100%] z-[20] block bg-[#fff] mt-[20px] px-[150px] py-[30px]">
       <div className="flex w-[100%] justify-around">
         <div className="flex flex-col gap-[10px]">
           <h2 className="text-[24px] font-[700]">Thông tin công ty</h2>

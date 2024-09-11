@@ -92,12 +92,9 @@ const UserManager: React.FC = () => {
     dispatch(changeUserStatus({ id, status }));
   };
   console.log(users);
-  
 
   useEffect(() => {
-
-    dispatch(getAllUser({sort: '', search: ''}));
-    
+    dispatch(getAllUser({ sort: "", search: "" }));
   }, []);
 
   useEffect(() => {
