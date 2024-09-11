@@ -30,7 +30,6 @@ const Header: React.FC = () => {
   });
 
   console.log(category);
-  
 
   const [currentId, setCurrentId] = useState<number>(() => {
     const id = localStorage.getItem("userId");
@@ -78,7 +77,7 @@ const Header: React.FC = () => {
               icon={faCartShopping}
               className="text-[32px]"
             ></FontAwesomeIcon>
-            <div className="size-[20px] rounded-[50%] flex justify-center items-center text-white absolute bg-[red] top-[-10px] right-[-10px]">
+            <div onClick={() => route.push('/carts')} className="size-[20px] rounded-[50%] flex justify-center items-center text-white absolute bg-[red] top-[-10px] right-[-10px]">
               {0 && user.carts.length}
             </div>
           </div>
@@ -98,13 +97,18 @@ const Header: React.FC = () => {
               </li>
               {user.role && (
                 <li
-                  onClick={() => route.push("/")}
-                  className="w-[100%] p-[10px]"
+                  onClick={() => route.push("/dashboard")}
+                  className="w-[100%] hover:bg-[#999] p-[10px]"
                 >
                   Trang quản trị
                 </li>
               )}
-              <li className="border-t-[1px] w-[100%] p-[10px]">Đăng xuất</li>
+              <li
+                onClick={handleLogout}
+                className="border-t-[1px] hover:bg-[#999] w-[100%] p-[10px]"
+              >
+                Đăng xuất
+              </li>
             </ul>
           </div>
         </div>

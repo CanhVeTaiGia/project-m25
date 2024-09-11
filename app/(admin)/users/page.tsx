@@ -91,11 +91,14 @@ const UserManager: React.FC = () => {
     const { id, status } = user;
     dispatch(changeUserStatus({ id, status }));
   };
+  console.log(users);
+  
 
   useEffect(() => {
-    dispatch(getAllUser());
+
+    dispatch(getAllUser({sort: '', search: ''}));
+    
   }, []);
-  console.log(currentUser);
 
   useEffect(() => {
     setTotalPage(Math.ceil(users.length / 6));

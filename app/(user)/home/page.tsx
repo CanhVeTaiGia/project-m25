@@ -16,7 +16,7 @@ const Home: React.FC = () => {
   });
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts({}));
   }, []);
   return (
     <>
