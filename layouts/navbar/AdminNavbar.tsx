@@ -17,6 +17,7 @@ const AdminNavbar = () => {
   // Hàm đăng xuất
   const handleLogout = () => {
     localStorage.removeItem("userId");
+    localStorage.removeItem("role");
     route.push("/sign-in");
   };
   return (

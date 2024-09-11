@@ -99,7 +99,7 @@ const AdminSignIn = () => {
         } else {
           localStorage.setItem("role", res.data[0].role);
           localStorage.setItem("userId", res.data[0].id);
-          route.push("/");
+          route.push("/home");
         }
       }
     } else {
@@ -113,7 +113,7 @@ const AdminSignIn = () => {
 
   // Chuyển hướng sang trang admin hoặc không
   const handleRouteHome = () => {
-    route.push("/");
+    route.push("/home");
   };
   const handleRouteAdmin = () => {
     route.push("/dashboard");
@@ -219,7 +219,12 @@ const AdminSignIn = () => {
           )}
         </div>
         <div className="flex justify-end px-[10px] cursor-pointer">
-          <p onClick={() => route.push('sign-up')} className="underline text-[#08f]">Đăng ký</p>
+          <p
+            onClick={() => route.push("sign-up")}
+            className="underline text-[#08f]"
+          >
+            Đăng ký
+          </p>
         </div>
         <div className="w-[100%] mt-[20px] flex justify-center">
           <button className="px-[30px] h-[40px] text-white rounded-[5px] hover:bg-[#2793ff] bg-[#1482ff]">

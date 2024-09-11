@@ -1,159 +1,139 @@
-'use client'
+"use client";
+import { url } from "@/baseUrl/url";
+import { UserSign } from "@/interface/inputValue";
+import { RootType } from "@/redux/store";
+import { addUser, getAllUser } from "@/services/user.service";
 import { faEye, faEyeSlash, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
-import React, { useState } from "react";
-import { validateEmail } from "../sign-in/page";
-
 import axios, { AxiosResponse } from "axios";
-import { UserSign } from "@/interface/inputValue";
-import { UserType } from "@/interface/userType";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import bcrypt from 'bcryptjs-react'
-import { url } from "@/baseUrl/url";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import bcrypt from "bcryptjs-react";
+import { UserType } from "@/interface/userType";
 
-const SignUp = () => {
-  // Các state
+const SignUp: React.FC = () => {
   const route = useRouter();
-  const [invaliteEmail, setInvalitEmail] = useState<boolean>(false);
-  const [routeForm, setRouteForm] = useState<boolean>(false);
-  const [wrong, setWrong] = useState<{
-    email: boolean;
-    password: boolean;
-  }>({
-    email: false,
-    password: false,
+  const dispatch = useDispatch();
+  const { users }: any = useSelector((state: RootType) => {
+    return state.users;
   });
-  const [users, setUsers] = useState<UserType[]>([]);
+
+  const [showPassword, setShowPassowrd] = useState<boolean>(false);
   const [user, setUser] = useState<UserSign>({
     email: "",
     password: "",
+    repassword: "",
   });
   const [warning, setWarning] = useState<{
     email: boolean;
     password: boolean;
+    repassword: boolean;
   }>({
     email: false,
     password: false,
+    repassword: false,
   });
-  const [showpassword, setShowpassword] = useState<boolean>(false);
+  const [wrong, setWrong] = useState<{
+    email: boolean;
+    password: boolean;
+    repassword: boolean;
+  }>({
+    email: false,
+    password: false,
+    repassword: false,
+  });
+  const [showRepassword, setShowRepassword] = useState<boolean>(false);
 
-  // Reset Input
-  const resetInput = () => {
-    setUser({
-      email: "",
-      password: "",
-    });
-  };
-
-  // Hàm đăng nhập
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(user.email);
-
-    const res: AxiosResponse = await axios.get(
-      `${url}/users?email_like=${user.email}`
-    );
-    // console.log(user.email);
-    if (warning.email || warning.password) {
-      return;
-    }
-    if (!validateEmail(user.email)) {
-      setInvalitEmail(true);
-      setTimeout(() => {
-        setInvalitEmail(false);
-      }, 1000);
-      return;
-    }
-
-    if (res.data.length > 0) {
-      let decryptedPass: boolean = bcrypt.compareSync(
-        user.password,
-        res.data[0].password
-      );
-      if (!res.data[0].email) {
-        setWrong({
-          ...wrong,
-          email: true,
-        });
-      }
-      if (!decryptedPass) {
-        setWrong({ ...wrong, password: true });
-      }
-      setTimeout(() => {
-        setWrong({
-          email: false,
-          password: false,
-        });
-      }, 1000);
-      if (wrong.email || warning.password) {
-        return;
-      }
-      if (res.data[0].email === user.email && decryptedPass) {
-        if (res.data[0].role) {
-          localStorage.setItem("role", res.data[0].role);
-          localStorage.setItem("userId", res.data[0].id);
-          setRouteForm(true);
-        } else {
-          localStorage.setItem("role", res.data[0].role);
-          localStorage.setItem("userId", res.data[0].id);
-          route.push("/");
-        }
-      }
-    } else {
-      setWrong({
-        ...wrong,
-        email: true,
-        password: true,
-      });
-    }
-  };
-
-  // Chuyển hướng sang trang admin hoặc không
-  const handleRouteHome = () => {
-    route.push("/");
-  };
-  const handleRouteAdmin = () => {
-    route.push("/dashboard");
-  };
-
-  // Hàm đưa input vào state
-  const handleSetUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    // Kiểm tra để không được để trống mật khẩu và email
-    setWarning((prev: any) => ({
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setUser((prev) => ({
       ...prev,
-      [name]: value === "",
+      [name]: value,
     }));
-
-    setUser({ ...user, [name]: value });
   };
+
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const res: AxiosResponse = await axios.get(`${url}/users`);
+    const existingUser = res.data[0];
+
+    if (!user.email) {
+      setWarning((prev) => ({
+        ...prev,
+        email: true,
+      }));
+      setTimeout(
+        () =>
+          setWarning((prev) => ({
+            ...prev,
+            email: false,
+          })),
+        2000
+      );
+    }
+    if (!user.password) {
+      setWarning((prev) => ({
+        ...prev,
+        password: true,
+      }));
+      setTimeout(() => {
+        setWarning((prev) => ({ ...prev, password: false }));
+      }, 2000);
+    }
+    if (!user.repassword) {
+      setWarning((prev) => ({
+        ...prev,
+        repassword: true,
+      }));
+    }
+    if (warning.email || warning.password || warning.repassword) {
+      return;
+    }
+    const emailExists = existingUser.email === user.email;
+    const passwordsMatch = user.password === user.repassword;
+
+    if (emailExists) {
+      setWrong((prev) => ({ ...prev, email: true }));
+      setTimeout(() => {
+        setWrong((prev) => ({ ...prev, email: false }));
+      }, 2000);
+      return;
+    }
+
+    if (!passwordsMatch) {
+      setWrong((prev) => ({ ...prev, repassword: true }));
+      setTimeout(() => {
+        setWrong((prev) => ({ ...prev, repassword: false }));
+      }, 2000);
+      return;
+    }
+
+    const cryptedPassword = bcrypt.hashSync(user.password, 10);
+
+    const newUser: UserType = {
+      email: user.email,
+      password: cryptedPassword,
+      role: false,
+      fullname: "",
+      status: true,
+      phone: "",
+      address: "",
+      username: "",
+      carts: []
+    };
+
+    dispatch(addUser(newUser));
+    route.push("/sign-in");
+  };
+
+  useEffect(() => {
+    dispatch(getAllUser());
+  }, []);
   return (
     <div className="w-[100%] relative h-[100vh] flex justify-center pt-[150px]">
-      {routeForm && (
-        <div className="z-[100] bg-[#000000bb] w-[100%] flex justify-center items-center h-[100vh] top-0 left-0 absolute">
-          <div className="w-[500px] text-white px-[20px] rounded-[5px] py-[40px] p-[10px] border-[1px] bg-[#111111cd]">
-            <h2 className="text-center text-[32px] pb-[20px]">
-              Chuyển đến trang
-            </h2>
-            <div className="flex justify-between w-[100%] z-[100] py-[20px] px-[80px]">
-              <button
-                onClick={handleRouteHome}
-                className="h-[40px] bg-[#0af] rounded-[5px] border-[1px] p-[10px]"
-              >
-                Trang Chủ
-              </button>
-              <button
-                onClick={handleRouteAdmin}
-                className="h-[40px] bg-[red] rounded-[5px] border-[1px] p-[10px]"
-              >
-                Trang Quản lí
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       <Image
         className="absolute w-[100%] top-0 bottom-0 z-[-1] h-[100vh]"
         layout="fill"
@@ -162,62 +142,92 @@ const SignUp = () => {
         objectFit="cover"
       />
       <form
-        onSubmit={handleLogin}
-        className="w-[500px] relative text-white bg-[#ffffff20] rounded-[10px] pt-[100px] h-[450px] p-[20px] border-[1px]"
+        onSubmit={handleSignUp}
+        className="w-[500px] relative text-white bg-[#ffffff20] rounded-[10px] pt-[100px] h-[540px] p-[20px] border-[1px]"
       >
         <div className="absolute flex justify-center items-center size-[200px] rounded-[50%] top-[-100px] left-[150px] bg-[#00aeff] border-[2px]">
           <FontAwesomeIcon className="text-[100px]" icon={faUser} />
         </div>
-
-        <div className="p-[5px] h-[100px] mt-[20px]">
+        <div className="p-[5px] h-[80px] mt-[20px]">
           <label className="block text-[16px]">Email</label>
           <input
+            onChange={handleChange}
             name="email"
-            onChange={handleSetUser}
             type="text"
             className="w-[100%] mt-[5px] bg-transparent h-[40px] p-[10px] rounded-[5px] border-[1px] outline-none"
           />
-          {warning.email && (
-            <p className="text-[#f00] mt-[5px]">Email không được để trống</p>
-          )}
-          {invaliteEmail && (
-            <p className="text-[#f00] mt-[5px]">Email không đúng định dạng</p>
-          )}
           {wrong.email && (
-            <p className="text-[#f00] mt-[5px]">Email không đúng</p>
+            <p className="text-[#f00] mt-[5px] text-[14px]">Email không đúng</p>
+          )}
+          {warning.email && (
+            <p className="text-[#f00] mt-[5px] text-[14px]">
+              Email không được để trống
+            </p>
           )}
         </div>
         <div className="p-[5px] w-[100%] relative h-[100px] mt-[15px]">
           <label className="block text-[16px]">Mật khẩu</label>
           <input
+            onChange={handleChange}
             name="password"
-            onChange={handleSetUser}
-            type={showpassword ? "text" : "password"}
+            type="password"
             className="w-[100%] mt-[5px] bg-transparent h-[40px] p-[10px] rounded-[5px] border-[1px] outline-none"
           />
+
           {warning.password && (
-            <p className="text-[#f00] mt-[5px]">Mật khẩu không được để trống</p>
+            <p className="text-[#f00] mt-[5px] text-[14px]">
+              Mật khẩu không được để trống
+            </p>
           )}
-          {wrong.password && (
-            <p className="text-[#f00] mt-[5px]">Mật khẩu không đúng</p>
-          )}
-          {showpassword ? (
+          {showPassword ? (
             <FontAwesomeIcon
-              onClick={() => setShowpassword(false)}
               className="text-[24px] absolute top-[40px] right-[19px] cursor-pointer"
+              onClick={() => setShowPassowrd(false)}
               icon={faEye}
             />
           ) : (
             <FontAwesomeIcon
-              onClick={() => setShowpassword(true)}
-              className="text-[24px] absolute top-[40px] right-[20px] cursor-pointer"
+              className="text-[24px] absolute top-[40px] right-[19px] cursor-pointer"
+              onClick={() => setShowPassowrd(true)}
               icon={faEyeSlash}
             />
           )}
         </div>
-        <div className="flex justify-end px-[10px] cursor-pointer">
+        <div className="p-[5px] w-[100%] relative h-[80px] mt-[10px]">
+          <label className="block text-[16px]">Nhập lại mật khẩu</label>
+          <input
+            onChange={handleChange}
+            name="repassword"
+            type="password"
+            className="w-[100%] mt-[5px] bg-transparent h-[40px] p-[10px] rounded-[5px] border-[1px] outline-none"
+          />
+          {showRepassword ? (
+            <FontAwesomeIcon
+              className="text-[24px] absolute top-[40px] right-[19px] cursor-pointer"
+              onClick={() => setShowRepassword(false)}
+              icon={faEye}
+            />
+          ) : (
+            <FontAwesomeIcon
+              className="text-[24px] absolute top-[40px] right-[19px] cursor-pointer"
+              onClick={() => setShowRepassword(true)}
+              icon={faEyeSlash}
+            />
+          )}
+          {wrong.repassword && (
+            <p className="text-[#f00] mt-[5px] text-[14px]">
+              Mật khẩu phải khớp với mật khẩu vừa nhập
+            </p>
+          )}
+          {warning.repassword && (
+            <p className="text-[#f00] mt-[5px] text-[14px]">
+              Mật khẩu không được để trống
+            </p>
+          )}
+        </div>
+        <div className="flex justify-end px-[10px] mt-[5px] cursor-pointer">
           <p
-            onClick={() => route.push("sign-up")}
+            onClick={() => route.push("sign-in")}
             className="underline text-[#08f]"
           >
             Đăng ký

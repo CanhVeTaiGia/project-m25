@@ -39,6 +39,7 @@ const AddUser: React.FC<AddEditUserProps> = ({ handleHideAddUser }) => {
       status: true,
       role: true,
       fullname: "",
+      carts: []
     };
     dispatch(addUser(newUser));
     handleHideAddUser();

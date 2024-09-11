@@ -31,6 +31,7 @@ const Admin = ({
     <main className="w-[100%] overflow-hidden flex h-[100vh]">
       <AdminNavbar></AdminNavbar>
       <div className="flex flex-col w-[87%]">{children}</div>
+      
     </main>
   );
 };

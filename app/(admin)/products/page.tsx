@@ -23,6 +23,9 @@ const ProductManager: React.FC = () => {
     return state.category;
   });
 
+  const [totalPage, setTotalPage] = useState<number>(
+    Math.ceil(products.length / 6)
+  );
   const [showDeleteModal, setShowDeleteModal] = useState<{
     show: boolean;
     id: number | undefined;
@@ -38,6 +41,10 @@ const ProductManager: React.FC = () => {
     show: false,
     id: 0,
     type: "add",
+  });
+  const [index, setIndex] = useState<{ first: number; last: number }>({
+    first: 0,
+    last: 5,
   });
 
   const handleShowDeleteForm = (id?: number) => {
@@ -66,7 +73,22 @@ const ProductManager: React.FC = () => {
       type: "add",
     });
   };
+  const handlePrev = () => {
+    console.log(index.first);
 
+    return index.first <= 0
+      ? null
+      : setIndex((prev) => {
+          return { first: prev.first - 5, last: prev.last - 5 };
+        });
+  };
+  const handleNext = () => {
+    return index.last >= products.length - 1
+      ? null
+      : setIndex((prev) => {
+          return { first: prev.first + 5, last: prev.last + 5 };
+        });
+  };
 
   useEffect(() => {
     dispatch(getProducts());
@@ -93,15 +115,15 @@ const ProductManager: React.FC = () => {
         showAddAndEditModal={showAddAndEditModal}
       />
       <div className="w-[100%] p-[20px] h-[100%] bg-[#ddd] ">
-        <div className=" w-[100%] rounded-[5px] p-[20px] bg-[#fff]">
+        <div className=" w-[100%] rounded-[5px] mt-[20px] p-[20px] bg-[#fff]">
           <table className="w-[100%] p-[20px]">
             <thead className="p-[10px] border-b-[1px]">
               <tr>
                 <th className="text-start p-[10px]">Tên</th>
-                <th className="text-start p-[10px]">Danh Mục</th>
-                <th className="text-start p-[10px]">Giá</th>
-                <th className="text-start p-[10px]">Số lượng</th>
-                <th className="text-center p-[10px]">Ảnh</th>
+                <th className=" p-[10px]">Danh Mục</th>
+                <th className=" p-[10px]">Giá</th>
+                <th className=" p-[10px]">Số lượng</th>
+                <th className=" p-[10px]">Ảnh</th>
                 <th>Chức năng</th>
               </tr>
             </thead>
@@ -109,25 +131,25 @@ const ProductManager: React.FC = () => {
               {products.map((item: ProductType) => {
                 return (
                   <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>
+                    <td className="p-[20px]">{item.name}</td>
+                    <td className=" text-center">
                       {category.map((category: CategoryType) => {
                         return category.id === item.categoryId
                           ? category.name
                           : null;
                       })}
                     </td>
-                    <td>
+                    <td className="p-[20px] text-center">
                       {Number(item.price).toLocaleString("it-IT", {
                         style: "currency",
                         currency: "VND",
                       })}
                     </td>
-                    <td>{item.stock}</td>
-                    <td>
+                    <td className="p-[20px] text-center">{item.stock}</td>
+                    <td className="p-[20px] text-center">
                       <Image src={item.image} alt="" width={50} height={50} />
                     </td>
-                    <td className="text-center">
+                    <td className="text-center p-[20px]">
                       <FontAwesomeIcon
                         onClick={() => handleShowAddOrEditForm("edit", item.id)}
                         className="text-[24px] text-[orange] cursor-pointer"
@@ -145,6 +167,7 @@ const ProductManager: React.FC = () => {
             </tbody>
           </table>
         </div>
+        {}
       </div>
     </>
   );
