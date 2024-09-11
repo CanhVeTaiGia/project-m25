@@ -4,7 +4,11 @@ import { RootType } from "@/redux/store";
 import { getCategory } from "@/services/category.service";
 import { getProducts } from "@/services/product.service";
 import { getUserById } from "@/services/user.service";
-import { faCartShopping, faLaptop, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCartShopping,
+  faLaptop,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -25,11 +29,13 @@ const Header: React.FC = () => {
     return state.products;
   });
 
+  console.log(category);
+  
+
   const [currentId, setCurrentId] = useState<number>(() => {
     const id = localStorage.getItem("userId");
     return id ? JSON.parse(id) : 0;
   });
-  
 
   const handleLogout = () => {
     localStorage.removeItem("userId");
@@ -45,7 +51,7 @@ const Header: React.FC = () => {
   useEffect(() => {
     dispatch(getUserById(currentId));
   }, [currentId, dispatch]);
-  
+
   return (
     <>
       <header className="w-[100%] flex flex-col p-[20px] bg-[#ccc]">
@@ -63,16 +69,20 @@ const Header: React.FC = () => {
           <div>
             <input
               type="text"
-              className="w-[400px] p-[5px] border-[#08f] outline-none border-[1px]"
+              placeholder="Bạn muốn tìm sản phẩm gì"
+              className="w-[400px] py-[5px] px-[10px] border-[#08f] outline-none border-[1px]"
             />
           </div>
           <div className="w-[40px] relative">
-            <FontAwesomeIcon icon={faCartShopping} className="text-[32px]"></FontAwesomeIcon>
-            <div className="size-[20px] rounded-[50%] flex justify-center items-center text-white absolute bg-[red] top-0">
+            <FontAwesomeIcon
+              icon={faCartShopping}
+              className="text-[32px]"
+            ></FontAwesomeIcon>
+            <div className="size-[20px] rounded-[50%] flex justify-center items-center text-white absolute bg-[red] top-[-10px] right-[-10px]">
               {0 && user.carts.length}
             </div>
           </div>
-          <div className="p-[5px] relative group flex flex-col items-center">
+          <div className="p-[5px] cursor-pointer relative group flex flex-col items-center">
             {user.avatar ? (
               <Image src={user.avtar} width={120} height={120} alt=""></Image>
             ) : (
@@ -82,14 +92,19 @@ const Header: React.FC = () => {
               />
             )}
             {user.email ? <p className="text-[12px]">{user.username}</p> : null}
-            <ul className="w-[120px] text-[14px] flex-col bg-white top-[60px] border-[1px] z-[999] absolute hidden group-hover:flex hover:flex">
-              <li className="border-[1px] w-[100%] p-[5px]">Trang cá nhân</li>
+            <ul className="w-[120px] text-[14px] rounded-[5px] flex-col bg-white top-[60px] border-[1px] z-[999] absolute hidden group-hover:flex hover:flex">
+              <li className="border-b-[1px] hover:bg-[#999] rounded-ss-[5px] rounded-se-[5px] w-[100%] p-[10px]">
+                Trang cá nhân
+              </li>
               {user.role && (
-                <li onClick={() => route.push('/')} className="border-[1px] w-[100%] p-[5px]">
+                <li
+                  onClick={() => route.push("/")}
+                  className="w-[100%] p-[10px]"
+                >
                   Trang quản trị
                 </li>
               )}
-              <li className="border-[1px] w-[100%] p-[5px]">Đăng xuất</li>
+              <li className="border-t-[1px] w-[100%] p-[10px]">Đăng xuất</li>
             </ul>
           </div>
         </div>
@@ -98,19 +113,29 @@ const Header: React.FC = () => {
         <div className="group flex py-[10px] cursor-pointer">
           <FontAwesomeIcon className="text-[20px]" icon={faLaptop} />{" "}
           <p className="ml-[10px]">Laptop mới</p>
-          <ul className="absolute border-[1px] hover:inline top-[43px] rounded-[5px] left-[270px] text-black bg-white group-hover:inline hidden w-[200px]">
-            {products.map((item: ProductType) => {
-              return (
-                <li className="border-[1px] p-[10px]" key={item.id}>
-                  {item.name}
-                </li>
-              );
-            })}
+          <ul className="absolute border-[1px] hover:inline top-[43px] z-[999] rounded-[5px] left-[270px] text-black bg-white group-hover:inline hidden w-[200px]">
+            {products
+              .map((item: ProductType) => {
+                return (
+                  <li className="border-[1px] p-[10px]" key={item.id}>
+                    {item.name}
+                  </li>
+                );
+              })
+              .reverse()
+              .slice(0, 4)}
           </ul>
         </div>
-        <div className="group flex py-[10px] cursor-pointer">
+        <div className="group flex py-[10px] relative cursor-pointer">
           <FontAwesomeIcon className="text-[20px]" icon={faLaptop} />{" "}
-          <p onClick={handleLogout} className="pl-[10px]">Laptop các loại </p>
+          <p onClick={handleLogout} className="pl-[10px]">
+            Laptop các loại{" "}
+          </p>
+          <ul className="absolute border-[1px] hover:inline top-[42px] z-[99999999] rounded-[5px] left-[-20px] text-black bg-white group-hover:inline hidden w-[200px]">
+            {category.map((item: any) => (
+              <li className="border-[1px] p-[10px]">{item.name}</li>
+            ))}
+          </ul>
         </div>
       </div>
     </>
