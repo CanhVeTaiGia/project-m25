@@ -47,8 +47,8 @@ const Header: React.FC = () => {
     route.push("/sign-in");
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
-  }
+    dispatch(getProducts({ id: null, search: e.target.value }));
+  };
   const handleFindByCategory = (id: number | undefined) => {
     dispatch(getProducts({ id: id, search: null }));
     if (pathname === "/home") {
@@ -85,7 +85,7 @@ const Header: React.FC = () => {
           </div>
           <div className="flex">
             <input
-            onChange={handleChange}
+              onChange={handleChange}
               type="text"
               placeholder="Bạn muốn tìm sản phẩm gì"
               className="w-[400px] py-[5px] px-[10px] border-[#08f] outline-none border-[1px]"
