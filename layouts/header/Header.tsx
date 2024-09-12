@@ -7,7 +7,7 @@ import {
   getACategory,
   getCategory,
 } from "@/services/category.service";
-import { getProducts } from "@/services/product.service";
+import { getProduct, getProducts } from "@/services/product.service";
 import { getUserById } from "@/services/user.service";
 import {
   faCartShopping,
@@ -46,11 +46,16 @@ const Header: React.FC = () => {
     localStorage.removeItem("userId");
     route.push("/sign-in");
   };
-  const handleSearchProduct = () => {};
-  const handleSetCategory = (id: number | undefined) => {
-    localStorage.setItem("categoryId", JSON.stringify(id));
-    // if()
-    // route.push("/home");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  }
+  const handleFindByCategory = (id: number | undefined) => {
+    dispatch(getProducts({ id: id, search: null }));
+    if (pathname === "/home") {
+      return;
+    }
+    // dispatch(filteredProduct(id));
+    route.push("/home");
   };
 
   useEffect(() => {
@@ -80,6 +85,7 @@ const Header: React.FC = () => {
           </div>
           <div className="flex">
             <input
+            onChange={handleChange}
               type="text"
               placeholder="Bạn muốn tìm sản phẩm gì"
               className="w-[400px] py-[5px] px-[10px] border-[#08f] outline-none border-[1px]"
@@ -143,12 +149,11 @@ const Header: React.FC = () => {
           <FontAwesomeIcon icon={faHouse} />
           <p>Trang chủ</p>
         </div>
-        <div className="group flex py-[10px] cursor-pointer">
+        <div className="group z-[999] flex py-[10px] cursor-pointer">
           <FontAwesomeIcon className="text-[20px]" icon={faLaptop} />{" "}
           <p className="ml-[10px]">Laptop mới</p>
-          <ul className="absolute border-[1px] hover:inline top-[43px] z-[999] rounded-[5px] left-[270px] text-black bg-white group-hover:inline hidden w-[200px]">
+          <ul className="absolute border-[1px] hover:inline top-[43px] rounded-[5px] left-[620px] text-black bg-white group-hover:inline hidden w-[200px]">
             {products
-
               .map((item: ProductType) => {
                 return (
                   <li
@@ -161,18 +166,14 @@ const Header: React.FC = () => {
                 );
               })
               .reverse()
-              .slice(0, 4)}
+              .slice(0, 8)}
           </ul>
         </div>
-        <div className="group flex py-[10px] relative cursor-pointer">
-          <FontAwesomeIcon className="text-[20px]" icon={faLaptop} />{" "}
-          <p onClick={handleLogout} className="pl-[10px]">
-            Laptop các loại{" "}
-          </p>
-          <ul className="absolute border-[1px] hover:inline top-[42px] z-[99999999] rounded-[5px] left-[-20px] text-black bg-white group-hover:inline hidden w-[200px]">
+        <div className="group z-[999] flex py-[10px] cursor-pointer">
+          <ul className="z-[9999] absolute border-[1px] hover:inline top-[42px] rounded-[5px] right-[150px] text-black bg-white group-hover:inline hidden w-[200px]">
             {category.map((item: CategoryType) => (
               <li
-                onClick={() => handleSetCategory(item.id)}
+                onClick={() => handleFindByCategory(item.id)}
                 key={item.id}
                 className="border-[1px] p-[10px]"
               >
@@ -180,6 +181,8 @@ const Header: React.FC = () => {
               </li>
             ))}
           </ul>
+          <FontAwesomeIcon className="text-[20px]" icon={faLaptop} />{" "}
+          <p className="pl-[10px]">Laptop các loại </p>
         </div>
       </div>
     </>

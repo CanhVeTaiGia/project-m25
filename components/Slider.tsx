@@ -16,8 +16,8 @@ const Slider: React.FC = () => {
   const back = () => {
     if (currentIndex > 1) {
       setCurrentIndex(currentIndex - 1);
-    }else if(currentIndex >= 0){
-      setCurrentIndex(images.length + currentIndex - 1)
+    } else if (currentIndex >= 0) {
+      setCurrentIndex(images.length + currentIndex - 1);
     }
   };
 
@@ -31,7 +31,7 @@ const Slider: React.FC = () => {
 
   return (
     <article className="relative w-full flex flex-shrink-0 overflow-hidden shadow-2xl">
-      <div className="rounded-full bg-gray-600 text-white absolute top-5 right-5 text-sm px-2 text-center z-[1]">
+      <div className="rounded-full bg-gray-600 text-white absolute top-5 right-5 text-sm px-2 text-center">
         <span>{currentIndex}</span>/<span>{images.length}</span>
       </div>
       {images.map((image, index) => (
@@ -48,7 +48,7 @@ const Slider: React.FC = () => {
       ))}
       <button
         onClick={back}
-        className="absolute left-14 top-1/2 -translate-y-1/2 w-11 h-11 flex justify-center items-center rounded-full shadow-md z-10 bg-gray-100 hover:bg-gray-200"
+        className="absolute left-14 top-1/2 -translate-y-1/2 w-11 h-11 flex justify-center items-center rounded-full shadow-md bg-gray-100 hover:bg-gray-200"
       >
         <svg
           className="w-8 h-8 font-bold transition duration-500 ease-in-out transform motion-reduce:transform-none text-gray-500 hover:text-gray-600 hover:-translate-x-0.5"
@@ -67,7 +67,7 @@ const Slider: React.FC = () => {
       </button>
       <button
         onClick={next}
-        className="absolute right-14 top-1/2 -translate-y-1/2 w-11 h-11 flex justify-center items-center rounded-full shadow-md z-[1] bg-gray-100 hover:bg-gray-200"
+        className="absolute right-14 top-1/2 -translate-y-1/2 w-11 h-11 flex justify-center items-center rounded-full shadow-md bg-gray-100 hover:bg-gray-200"
       >
         <svg
           className="w-8 h-8 font-bold transition duration-500 ease-in-out transform motion-reduce:transform-none text-gray-500 hover:text-gray-600 hover:translate-x-0.5"

@@ -1,15 +1,29 @@
+import { url } from "@/baseUrl/url";
 import { ProductType } from "@/interface/productType";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 
 export const getProducts: any = createAsyncThunk(
   "products/getProducts",
-  async () => {
-    const res: AxiosResponse = await axios.get(
-      "http://localhost:8080/products"
-    );
 
-    return res.data;
+  async ({ id, search }: { id: any; search: any }) => {
+    console.log(search, id);
+    if (search) {
+      const res: AxiosResponse = await axios.get(
+        `http://localhost:8080/products?name_like=${search}`
+      );
+      return res.data;
+    } else if (id) {
+      const res: AxiosResponse = await axios.get(
+        `http://localhost:8080/products?categoryId_like=${id}`
+      );
+      return res.data;
+    } else {
+      const res: AxiosResponse = await axios.get(
+        `http://localhost:8080/products`
+      );
+      return res.data;
+    }
   }
 );
 

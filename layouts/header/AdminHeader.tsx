@@ -80,7 +80,7 @@ export const AdminHeaderProduct: React.FC<AdminHeaderProductProps> = ({
 }) => {
   return (
     <>
-      <header className="w-[100%] px-[20px] items-center h-[100px] text-black flex bg-[#ffffff]">
+      <header className="w-[100%] px-[20px] items-center h-[100px] py-[20px] text-black flex bg-[#ffffff]">
         <h2 className="text-[24px] pl-[20px]">Sản phẩm</h2>
         <button
           onClick={() => handleShowAddOrEditForm("add")}

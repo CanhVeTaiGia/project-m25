@@ -25,7 +25,7 @@ const productSlice: any = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getProducts.fulfilled, (state, action) => {
-        state.products = action.payload;
+        state.products = [...action.payload];
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.products = [...action.payload];
