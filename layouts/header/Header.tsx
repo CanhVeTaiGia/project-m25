@@ -171,6 +171,7 @@ const Header: React.FC = () => {
         </div>
         <div className="group z-[999] flex py-[10px] cursor-pointer">
           <ul className="z-[9999] absolute border-[1px] hover:inline top-[42px] rounded-[5px] right-[150px] text-black bg-white group-hover:inline hidden w-[200px]">
+            {category.length > 0? <li className="border-[1px] p-[10px]" onClick={() => handleFindByCategory(0)}>Mặc đinh</li> : ''}
             {category.map((item: CategoryType) => (
               <li
                 onClick={() => handleFindByCategory(item.id)}
