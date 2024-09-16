@@ -1,21 +1,27 @@
-"use client"; // Đánh dấu là Client Component
+"use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function ClientRootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
   const router = useRouter();
+  const [currentUserId, setCurrentUserId] = useState<number | null>(() => {
+    const id = localStorage.getItem("userId");
+    return id ? parseInt(id) : null;
+  });
 
   useEffect(() => {
-    const currentUser = localStorage.getItem("userId");
-    if (!currentUser) {
+    if (!currentUserId) {
       router.push("/sign-in");
+    }else if(pathname === '/'){
+      router.push("/home");
     }
-  }, [router]);
+  }, []);
 
   return <>{children}</>;
 }

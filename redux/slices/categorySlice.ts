@@ -26,10 +26,10 @@ const categorySlice: any = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getCategory.fulfilled, (state, action) => {
-        state.category = action.payload;
+        state.category = [...action.payload];
       })
       .addCase(deleteCategory.fulfilled, (state, action) => {
-        state.category = action.payload;
+        state.category = [...action.payload];
       })
       .addCase(addCategory.fulfilled, (state, action) => {
         state.category = [...state.category, action.payload];

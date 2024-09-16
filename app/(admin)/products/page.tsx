@@ -91,7 +91,7 @@ const ProductManager: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts({ search: null }));
   }, []);
   useEffect(() => {
     dispatch(getCategory());

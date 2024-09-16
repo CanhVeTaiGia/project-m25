@@ -1,7 +1,8 @@
 "use client";
+import { UserType } from "@/interface/userType";
 import { RootType } from "@/redux/store";
 import { getProduct } from "@/services/product.service";
-import { getUserById } from "@/services/user.service";
+import { addToCart, getAllUser, getUserById } from "@/services/user.service";
 import Image from "next/image";
 
 import React, { useEffect, useState } from "react";
@@ -23,33 +24,56 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ params }) => {
     const id = localStorage.getItem("userId");
     return id ? JSON.parse(id) : 0;
   });
-  const { user }: any = useSelector((state: RootType) => {
+  const { users }: any = useSelector((state: RootType) => {
     return state.users;
+  });
+  const [foundUser, setFoundUser] = useState<UserType>(() => {
+    const found = users.find((item: any) => item.id === currentId);
+    return found;
   });
 
   const [quantity, setQuantity] = useState<number>(0);
 
-  const handleSetQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
-
-  }
+  const handleSetQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {};
+  // const { carts } = foundUser || [];
 
   const handleAddToCart = () => {
-    const { carts } = user;
-    console.log(carts);
-    const newOrder = {
-      userId: currentId,
-      productId: productId,
-      quantity: 1,
-    };
-    carts.push(newOrder);
+    if (foundUser) {
+      const { carts = [] } = foundUser;
+      const foundIndex = carts.findIndex(
+        (item: any) => item.productId === Number(productId)
+      );
+
+      if (foundIndex !== -1) {
+        const updatedCarts = carts.map((cart: any, index: number) =>
+          index === foundIndex ? { ...cart, quantity: cart.quantity + 1 } : cart
+        );
+        dispatch(addToCart({ ...foundUser, carts: updatedCarts }));
+      } else {
+        const newCart = {
+          userId: currentId,
+          productId: Number(productId),
+          quantity: 1,
+          price: Number(editProduct.price),
+        };
+        dispatch(addToCart({ ...foundUser, carts: [...carts, newCart] }));
+      }
+    }
   };
 
+  // console.log(foundUser);
   useEffect(() => {
-    dispatch(getUserById(currentId));
-  }, [currentId]);
+    dispatch(getAllUser({ search: null }));
+  }, []);
   useEffect(() => {
     dispatch(getProduct(productId));
   }, []);
+  useEffect(() => {
+    setFoundUser(() => {
+      const found = users.find((item: any) => item.id === currentId);
+      return found;
+    });
+  }, [users]);
   return (
     <main className="w-[100%] px-[150px] py-[20px] bg-[#eee]">
       <div className="w-[100%] py-[20px] bg-[white]">
@@ -78,11 +102,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ params }) => {
                 {editProduct.stock ? " Còn hàng" : " Hết hàng"}
               </p>
             </span>
-            <p className="flex gap-[10px] font-[700] text-[16px]">
+            <span className="flex gap-[10px] font-[700] text-[16px]">
               Số lượng: <p className="font-[400]">{editProduct.stock}</p>
-            </p>
+            </span>
             <div className="flex flex-col w-[100%] mt-[150px] gap-[10px]">
-              <button onClick={handleAddToCart} className="rounded-[5px] text-[red] w-[100%] cursor-pointer py-[20px] border-[red] border-[1px] bg-[#fff017]  text-[14px] flex justify-center items-center">
+              <button
+                onClick={handleAddToCart}
+                className="rounded-[5px] text-[red] w-[100%] cursor-pointer py-[20px] border-[red] border-[1px] bg-[#fff017]  text-[14px] flex justify-center items-center"
+              >
                 Thêm vào giỏ hàng
               </button>
               <button className="rounded-[5px] text-white w-[100%] cursor-pointer py-[20px] bg-red-500 flex justify-center items-center">

@@ -54,12 +54,12 @@ const Header: React.FC = () => {
     if (pathname === "/home") {
       return;
     }
-    // dispatch(filteredProduct(id));
     route.push("/home");
   };
+  const handleSearchProduct = (search: "") => {};
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts({ search: "" }));
   }, []);
   useEffect(() => {
     dispatch(getCategory());
@@ -68,12 +68,18 @@ const Header: React.FC = () => {
   useEffect(() => {
     dispatch(getUserById(currentId));
   }, [currentId, dispatch]);
+  useEffect(() => {
+    dispatch(getUserById(currentId));
+  }, []);
 
   return (
     <>
       <header className="w-[100%] flex flex-col p-[20px] bg-[#ccc]">
         <div className="w-[100%] px-[150px] items-center flex justify-between">
-          <div className="flex flex-col gap-[10px] items-center">
+          <div
+            onClick={() => route.push("/home")}
+            className="flex cursor-pointer flex-col gap-[10px] items-center"
+          >
             <Image
               className="rounded-[50%]"
               src="https://firebasestorage.googleapis.com/v0/b/m25-project.appspot.com/o/logo%2FPC.png?alt=media&token=1e0a6997-a3d7-44f9-9781-0e3add488d45"
@@ -97,7 +103,10 @@ const Header: React.FC = () => {
               />
             </button>
           </div>
-          <div className="w-[40px] cursor-pointer relative">
+          <div
+            onClick={() => route.push("/cart")}
+            className="w-[40px] cursor-pointer relative"
+          >
             <FontAwesomeIcon
               icon={faCartShopping}
               className="text-[32px]"
@@ -106,7 +115,11 @@ const Header: React.FC = () => {
               onClick={() => route.push("/carts")}
               className="size-[20px] rounded-[50%] flex justify-center items-center text-white absolute bg-[red] top-[-10px] right-[-10px]"
             >
-              {0 && user.carts.length}
+              {user.carts
+                ? user.carts.length !== 0
+                  ? user.carts.length
+                  : 0
+                : 0}
             </div>
           </div>
           <div className="p-[5px] cursor-pointer relative group flex flex-col items-center">
@@ -119,21 +132,24 @@ const Header: React.FC = () => {
               />
             )}
             {user.email ? <p className="text-[12px]">{user.username}</p> : null}
-            <ul className="w-[120px] text-[14px] rounded-[5px] flex-col bg-white top-[60px] border-[1px] z-[999] absolute hidden group-hover:flex hover:flex">
-              <li className="border-b-[1px] hover:bg-[#999] rounded-ss-[5px] rounded-se-[5px] w-[100%] p-[10px]">
+            <ul className="w-[120px] text-[14px] flex-col bg-white top-[60px] border-[1px] z-[999] absolute hidden group-hover:flex hover:flex">
+              <li
+                onClick={() => route.push("/profile")}
+                className=" hover:bg-[#999] hover:text-white w-[100%] p-[10px]"
+              >
                 Trang cá nhân
               </li>
               {user.role && (
                 <li
                   onClick={() => route.push("/dashboard")}
-                  className="w-[100%] hover:bg-[#999] p-[10px]"
+                  className="w-[100%] hover:bg-[#999] hover:text-white p-[10px]"
                 >
                   Trang quản trị
                 </li>
               )}
               <li
                 onClick={handleLogout}
-                className="border-t-[1px] hover:bg-[#999] w-[100%] p-[10px]"
+                className=" hover:text-white hover:bg-[#999] w-[100%] p-[10px]"
               >
                 Đăng xuất
               </li>
@@ -152,13 +168,15 @@ const Header: React.FC = () => {
         <div className="group z-[999] flex py-[10px] cursor-pointer">
           <FontAwesomeIcon className="text-[20px]" icon={faLaptop} />{" "}
           <p className="ml-[10px]">Laptop mới</p>
-          <ul className="absolute border-[1px] hover:inline top-[43px] rounded-[5px] left-[620px] text-black bg-white group-hover:inline hidden w-[200px]">
+          <ul className="absolute border-[1px] hover:inline top-[43px] left-[620px] text-black bg-white group-hover:inline hidden w-[200px]">
             {products
-              .map((item: ProductType) => {
+              .map((item: ProductType, index: number) => {
                 return (
                   <li
                     onClick={() => route.push(`/${item.id}`)}
-                    className="border-[1px] p-[10px]"
+                    className={`
+                      
+                       p-[10px] hover:bg-[#999] hover:text-white`}
                     key={item.id}
                   >
                     {item.name}
@@ -169,14 +187,23 @@ const Header: React.FC = () => {
               .slice(0, 8)}
           </ul>
         </div>
-        <div className="group z-[999] flex py-[10px] cursor-pointer">
-          <ul className="z-[9999] absolute border-[1px] hover:inline top-[42px] rounded-[5px] right-[150px] text-black bg-white group-hover:inline hidden w-[200px]">
-            {category.length > 0? <li className="border-[1px] p-[10px]" onClick={() => handleFindByCategory(0)}>Mặc đinh</li> : ''}
-            {category.map((item: CategoryType) => (
+        <div className="group flex py-[10px] cursor-pointer">
+          <ul className="z-[2] absolute border-[1px] hover:inline hover:bg-[] top-[42px] right-[160px] text-black bg-white group-hover:inline hidden w-[200px]">
+            {category.length > 0 ? (
+              <li
+                className=" hover:bg-[#999] hover:text-white p-[10px]"
+                onClick={() => handleFindByCategory(0)}
+              >
+                Mặc đinh
+              </li>
+            ) : (
+              ""
+            )}
+            {category.map((item: CategoryType, index: number) => (
               <li
                 onClick={() => handleFindByCategory(item.id)}
                 key={item.id}
-                className="border-[1px] p-[10px]"
+                className={` p-[10px] border-x-0 hover:bg-[#999] hover:text-white`}
               >
                 {item.name}
               </li>

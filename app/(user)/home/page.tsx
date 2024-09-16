@@ -40,7 +40,7 @@ const Home: React.FC = () => {
   }, [dispatch, products]);
 
   useEffect(() => {
-    dispatch(getProducts({id: 0, search: null}));
+    dispatch(getProducts({ id: 0, search: null }));
   }, []);
 
   return (
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
             )
             .map((product: ProductType) => (
               <div
-              key={product.id}
+                key={product.id}
                 onClick={() => route.push(`/${product.id}`)}
                 className="w-[280px] hover:border-[1px] cursor-pointer hover:border-[#f00] h-[400px] bg-white p-[5px]"
               >
@@ -72,8 +72,9 @@ const Home: React.FC = () => {
                 <p className="text-center">Còn lại: {product.stock}</p>
               </div>
             ))}
+          {products.length === 0 ? <p>Không có sản phẩm</p> : ""}
         </div>
-        {totalPage ? (
+        {totalPage > 1 ? (
           <Page
             setPage={handleChangePage}
             length={products.length}
